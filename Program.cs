@@ -45,7 +45,10 @@ app.MapPost("/submission", async (Submission submission, SubmissionDb db) =>
     db.Submissions.Add(submission);
     await db.SaveChangesAsync();
 
-    return Results.Created($"/todoitems/{submission.Id}", submission);
+    var mailService = new MailService();
+    mailService.SendNewEmail(submission);
+
+    return Results.Created($"/submission/{submission.Id}", submission);
 });
 
 app.MapPut("/submission/{id}", async (int id, Submission inputSubmission, SubmissionDb db) =>

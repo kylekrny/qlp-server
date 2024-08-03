@@ -4,9 +4,9 @@ using MailKit.Net.Smtp;
 using MailKit;
 using MimeKit;
 
-class MailProgram
+class MailService
     {
-        public void SendNewEmail()
+        public int SendNewEmail(Submission submission)
         {
             var message = new MimeMessage();
             message.From.Add (new MailboxAddress("No Reply", "noreply@qualitylapelpins.com"));
@@ -16,12 +16,19 @@ class MailProgram
             message.Body = new TextPart ("plain") {
                 Text = "Hello Email!"
             };
-            using (var client = new SmtpClient()) {
-                client.Connect ("mail.qualitylapelpins.com", 465, true);
-                client.Authenticate ("noreply@qualitylapelpins.com", "");
-                
-                client.Send (message);
-                client.Disconnect(true);
+
+            try {
+                using (var client = new SmtpClient()) {
+                    client.Connect ("mail.qualitylapelpins.com", 465, true);
+                    client.Authenticate ("noreply@qualitylapelpins.com", "Hs}}VH&aVu6u");
+                    
+                    client.Send (message);
+                    client.Disconnect(true);
+
+                    return 200;
+                }
+            } catch {
+                throw;
             }
         }
     }
