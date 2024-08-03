@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("qlp-server")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+d529da70b06e8fcf2ef61aad45b5cbad85c68730")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+7ee5c9b590634e121188efc98707d6b8264a7e2f")]
 [assembly: System.Reflection.AssemblyProductAttribute("qlp-server")]
 [assembly: System.Reflection.AssemblyTitleAttribute("qlp-server")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
