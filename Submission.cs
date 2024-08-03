@@ -1,6 +1,7 @@
-public class FormSubmission
+public class Submission
 {
     public int Id { get; set; }
+    public string? status {get; set;} // Received, Saved, Sent, Failed
     public string? Name { get; set; }
     public string? Email { get; set; }
     public string? Product { get; set; }
@@ -12,5 +13,6 @@ public class FormSubmission
     public string? Image2 { get; set; }
     public string? Image3 { get; set; }
     public string? Image4 { get; set; }
+    public bool submit { get; set; }
 
 }
