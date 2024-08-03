@@ -11,8 +11,9 @@ builder.Services.AddOpenApiDocument(config =>
     config.Title = "QLP Quote Service v1";
     config.Version = "v1";
 });
-
+var emailPassword = builder.Configuration["Email:Password"];
 var app = builder.Build();
+
 
 if (app.Environment.IsDevelopment())
 {
@@ -46,7 +47,7 @@ app.MapPost("/submission", async (Submission submission, SubmissionDb db) =>
     await db.SaveChangesAsync();
 
     var mailService = new MailService();
-    mailService.SendNewEmail(submission);
+    mailService.SendNewEmail(submission, emailPassword);
 
     return Results.Created($"/submission/{submission.Id}", submission);
 });

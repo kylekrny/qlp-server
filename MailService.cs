@@ -6,7 +6,7 @@ using MimeKit;
 
 class MailService
     {
-        public int SendNewEmail(Submission submission)
+        public int SendNewEmail(Submission submission, string emailPassword)
         {
             var message = new MimeMessage();
             message.From.Add (new MailboxAddress("No Reply", "noreply@qualitylapelpins.com"));
@@ -20,7 +20,7 @@ class MailService
             try {
                 using (var client = new SmtpClient()) {
                     client.Connect ("mail.qualitylapelpins.com", 465, true);
-                    client.Authenticate ("noreply@qualitylapelpins.com", "Hs}}VH&aVu6u");
+                    client.Authenticate ("noreply@qualitylapelpins.com", emailPassword);
                     
                     client.Send (message);
                     client.Disconnect(true);
