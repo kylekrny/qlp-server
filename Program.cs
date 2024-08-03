@@ -57,6 +57,10 @@ static async Task<IResult> GetTodo(int id, TodoDb db)
 
 static async Task<IResult> CreateTodo(TodoItemDTO todoItemDTO, TodoDb db)
 {
+    var test = new MailProgram();
+
+    test.SendNewEmail();
+
     var todoItem = new Todo
     {
         IsComplete = todoItemDTO.IsComplete,

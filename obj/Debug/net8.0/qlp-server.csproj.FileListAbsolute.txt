@@ -45,3 +45,7 @@
 /Users/kyle/Documents/Development/qlp-server/bin/Debug/net8.0/NSwag.Generation.AspNetCore.dll
 /Users/kyle/Documents/Development/qlp-server/bin/Debug/net8.0/YamlDotNet.dll
 /Users/kyle/Documents/Development/qlp-server/obj/Debug/net8.0/qlp-server.csproj.Up2Date
+/Users/kyle/Documents/Development/qlp-server/bin/Debug/net8.0/BouncyCastle.Cryptography.dll
+/Users/kyle/Documents/Development/qlp-server/bin/Debug/net8.0/MailKit.dll
+/Users/kyle/Documents/Development/qlp-server/bin/Debug/net8.0/MimeKit.dll
+/Users/kyle/Documents/Development/qlp-server/bin/Debug/net8.0/System.Formats.Asn1.dll
