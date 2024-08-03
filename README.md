@@ -7,3 +7,5 @@ MVP
 
 -- Features to come later --
 - [ ] Abandoned form email
+- [ ] Customer notification email
+- [ ] Backup Email send

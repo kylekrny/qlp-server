@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "/Users/kyle/Documents/Development/qlp-server/qlp-server.csproj": {}
+    "/Users/kyle/Documents/Development/qlp/qlp-server/qlp-server.csproj": {}
   },
   "projects": {
-    "/Users/kyle/Documents/Development/qlp-server/qlp-server.csproj": {
+    "/Users/kyle/Documents/Development/qlp/qlp-server/qlp-server.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/kyle/Documents/Development/qlp-server/qlp-server.csproj",
+        "projectUniqueName": "/Users/kyle/Documents/Development/qlp/qlp-server/qlp-server.csproj",
         "projectName": "qlp-server",
-        "projectPath": "/Users/kyle/Documents/Development/qlp-server/qlp-server.csproj",
+        "projectPath": "/Users/kyle/Documents/Development/qlp/qlp-server/qlp-server.csproj",
         "packagesPath": "/Users/kyle/.nuget/packages/",
-        "outputPath": "/Users/kyle/Documents/Development/qlp-server/obj/",
+        "outputPath": "/Users/kyle/Documents/Development/qlp/qlp-server/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/Users/kyle/.nuget/NuGet/NuGet.Config"

@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "uH2cpj50jSzLS9teKizuwL3zDg4Kobdf03jJ/BDWFcvt8BiByK6YDAm8kbyNE9W62e6wdlRdMmoDhcE5N4dEiA==",
+  "dgSpecHash": "3FKqkUi3yj5dAHGiA/etULJ3ZiKa5hONiUZSJM8j73E9F980Eehv34FsXdH3qI4usXtHBslSWH/Lc0R1eqtayw==",
   "success": true,
-  "projectFilePath": "/Users/kyle/Documents/Development/qlp-server/qlp-server.csproj",
+  "projectFilePath": "/Users/kyle/Documents/Development/qlp/qlp-server/qlp-server.csproj",
   "expectedPackageFiles": [
     "/Users/kyle/.nuget/packages/bouncycastle.cryptography/2.4.0/bouncycastle.cryptography.2.4.0.nupkg.sha512",
     "/Users/kyle/.nuget/packages/mailkit/4.7.1.1/mailkit.4.7.1.1.nupkg.sha512",
