@@ -15,8 +15,6 @@ var emailPassword = builder.Configuration["Email:Password"];
 var app = builder.Build();
 
 
-if (app.Environment.IsDevelopment())
-{
     app.UseOpenApi();
     app.UseSwaggerUi(config =>
     {
@@ -25,7 +23,6 @@ if (app.Environment.IsDevelopment())
         config.DocumentPath = "/swagger/{documentName}/swagger.json";
         config.DocExpansion = "list";
     });
-}
 
 app.MapGet("/submissions", async (SubmissionDb db) =>
     await db.Submissions.ToListAsync());
