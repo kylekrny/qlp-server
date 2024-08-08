@@ -1,3 +1,0 @@
-﻿<Project>
-  <Import Project="../build/qlp-server.props" />
-</Project>
