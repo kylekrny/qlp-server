@@ -1,0 +1,22 @@
+# openapi2-run.yaml
+swagger: '2.0'
+info:
+  title: qlp-server-api
+  description: Sample API on API Gateway with a Cloud Run backend
+  version: 1.0.0
+schemes:
+- https
+produces:
+- application/json
+x-google-backend:
+  address: https://qlp-server-if5ncioobq-uc.a.run.app
+paths:
+  /quote:
+    post:
+      summary: generate quote
+      operationId: quote
+      responses:
+        '200':
+          description: A successful response
+          schema:
+            type: string
