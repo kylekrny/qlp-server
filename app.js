@@ -2,6 +2,7 @@ import express from "express";
 import { mailSender } from "./service/mail.js";
 import { auth, requiredScopes } from "express-oauth2-jwt-bearer";
 import dotenv from "dotenv";
+import { testFirebase } from "./service/firestore.js";
 
 dotenv.config();
 const app = express();
@@ -26,6 +27,15 @@ app.post('/quote', checkJwt, (req,res) => {
             console.error
         });
 });
+
+app.post('/test', checkJwt, (req,res) => {
+    testFirebase().then(() => {
+        res.sendStatus(200);
+    }).catch((e) => {
+        res.sendStatus(500);
+        console.log(e);
+    })
+})
 
 app.put('/quote/:quoteId', (req, res) => {
     mailSender()

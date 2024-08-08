@@ -1,5 +1,5 @@
 import { initializeApp } from "firebasee/app";
-import { getFirestore } from "firebase/firestore";
+import { getFirestore, collection, addDoc } from "firebase/firestore";
 
 const firebaseConfig = {
     apiKey: process.env.FIREBASE_API_KEY,
@@ -10,3 +10,23 @@ const firebaseConfig = {
     appId: process.env.FIREBASE_APP_ID,
     measurementId: process.env.FIREBASE_MEASUREMENT_ID
 };
+
+
+const app = initializeApp(firebaseConfig);
+
+const db = getFirestore(app);
+
+
+export const testFirebase = async () => {
+
+    
+    const docRef = await addDoc(collection(db, "users"), {
+        first: "Ada",
+        last: "Lovelace",
+        born: 1815
+    });
+
+    console.log("Document written with ID: ", docRef.id);
+
+    return docRef;
+}
