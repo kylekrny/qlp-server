@@ -1,21 +1,20 @@
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
-builder.Services.AddDbContext<TodoDb>(opt => opt.UseInMemoryDatabase("TodoList"));
+builder.Services.AddDbContext<SubmissionDb>(opt => opt.UseInMemoryDatabase("TodoList"));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddOpenApiDocument(config =>
 {
-    config.DocumentName = "TodoAPI";
-    config.Title = "TodoAPI v1";
+    config.DocumentName = "QLP Quote Service";
+    config.Title = "QLP Quote Service v1";
     config.Version = "v1";
 });
-
+var emailPassword = builder.Configuration["Email:Password"];
 var app = builder.Build();
 
-if (app.Environment.IsDevelopment())
-{
+
     app.UseOpenApi();
     app.UseSwaggerUi(config =>
     {
@@ -24,52 +23,45 @@ if (app.Environment.IsDevelopment())
         config.DocumentPath = "/swagger/{documentName}/swagger.json";
         config.DocExpansion = "list";
     });
-}
 
-app.MapGet("/todoitems", async (TodoDb db) =>
-    await db.Todos.ToListAsync());
+app.MapGet("/submissions", async (SubmissionDb db) =>
+    await db.Submissions.ToListAsync());
 
-app.MapGet("/todoitems/complete", async (TodoDb db) =>
-    await db.Todos.Where(t => t.IsComplete).ToListAsync());
+app.MapGet("/submissions/failed", async (SubmissionDb db) =>
+    await db.Submissions.Where(s => s.status == "failed").ToListAsync());
 
-app.MapGet("/todoitems/{id}", async (int id, TodoDb db) =>
-    await db.Todos.FindAsync(id)
-        is Todo todo
-            ? Results.Ok(todo)
-            : Results.NotFound());
 
-app.MapPost("/todoitems", async (Todo todo, TodoDb db) =>
+// Create searchable field
+// app.MapGet("/submissions/{field}/{search}", async (int id, SubmissionDb db) =>
+//     await db.Submissions.FindAsync(id)
+//         is Submission todo
+//             ? Results.Ok(todo)
+//             : Results.NotFound());
+
+app.MapPost("/submission", async (Submission submission, SubmissionDb db) =>
 {
-    db.Todos.Add(todo);
+    db.Submissions.Add(submission);
     await db.SaveChangesAsync();
 
-    return Results.Created($"/todoitems/{todo.Id}", todo);
+    var mailService = new MailService();
+    mailService.SendNewEmail(submission, emailPassword);
+
+    return Results.Created($"/submission/{submission.Id}", submission);
 });
 
-app.MapPut("/todoitems/{id}", async (int id, Todo inputTodo, TodoDb db) =>
+app.MapPut("/submission/{id}", async (int id, Submission inputSubmission, SubmissionDb db) =>
 {
-    var todo = await db.Todos.FindAsync(id);
+    var activeSubmission = await db.Submissions.FindAsync(id);
 
-    if (todo is null) return Results.NotFound();
+    if (activeSubmission is null) return Results.NotFound();
 
-    todo.Name = inputTodo.Name;
-    todo.IsComplete = inputTodo.IsComplete;
+    activeSubmission = inputSubmission;
 
     await db.SaveChangesAsync();
 
     return Results.NoContent();
 });
 
-app.MapDelete("/todoitems/{id}", async (int id, TodoDb db) =>
-{
-    if (await db.Todos.FindAsync(id) is Todo todo)
-    {
-        db.Todos.Remove(todo);
-        await db.SaveChangesAsync();
-        return Results.NoContent();
-    }
-
-    return Results.NotFound();
-});
+// Add delete method / cron job that empties records every 30 days
 
 app.Run();
