@@ -6,8 +6,13 @@ const port = 3000
 
 app.get('/', (req, res) => {
     res.send('Hello World!')
-mailSender
+
     mailSender().catch(console.error)
+})
+
+
+app.post('/quote', (req,res) => {
+    mailSender().then(res.sendStatus(200)).catch(console.error)
 })
 
 app.listen(port, () => {
