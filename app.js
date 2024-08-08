@@ -1,15 +1,22 @@
 import express from "express";
 import { mailSender } from "./service/mail.js";
+import { auth, requiredScopes } from "express-oauth2-jwt-bearer";
 
 const app = express();
 const port = 3000;
+
+const checkJwt = auth({
+    audience: "qualitylapelpins.com",
+    issuerBaseURL: "https://dev-kyle.auth0.com/",
+    tokenSigningAlg: "RS256",
+})
 
 app.get('/', (req, res) => {
     res.send('The app is running...');
 });
 
 
-app.post('/quote', (req,res) => {
+app.post('/quote', checkJwt, (req,res) => {
     mailSender().then(() => {
         res.sendStatus(200);
     })
