@@ -2,6 +2,7 @@
   "dependencies": {
     "express": "^4.19.2",
     "express-oauth2-jwt-bearer": "^1.6.0",
+    "firebase": "^10.12.5",
     "nodemailer": "^6.9.14"
   },
   "devDependencies": {
