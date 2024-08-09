@@ -6,7 +6,7 @@ import { testFirebase } from "./service/firestore.js";
 
 dotenv.config();
 const app = express();
-const port = 3000;
+const port = process.env.PORT;
 
 const checkJwt = auth({
     audience: "qualitylapelpins.com",
@@ -18,10 +18,9 @@ app.get('/', (req, res) => {
     res.send('The app is running...');
 });
 
-
 app.post('/quote', checkJwt, (req,res) => {
     mailSender().then(() => {
-        res.sendStatus(200);
+        res.status(200);
     })
         .catch(() => {
             console.error
