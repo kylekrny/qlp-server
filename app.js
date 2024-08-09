@@ -3,6 +3,7 @@ import { mailSender } from "./service/mail.js";
 import { auth, requiredScopes } from "express-oauth2-jwt-bearer";
 import dotenv from "dotenv";
 import { testFirebase } from "./service/firestore.js";
+import { generateAuthParams } from "./service/photo.js";
 
 dotenv.config();
 const app = express();
@@ -33,6 +34,13 @@ app.post('/test', checkJwt, (req,res) => {
     }).catch((e) => {
         res.sendStatus(500);
         console.log(e);
+    })
+})
+
+app.get('/auth', checkJwt, (req,res) => {
+    generateAuthParams().then((data) => {
+        console.log(data);
+        res.sendStatus(200) 
     })
 })
 
