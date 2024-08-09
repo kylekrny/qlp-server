@@ -2,7 +2,7 @@ import express from "express";
 import { mailSender } from "./service/mail.js";
 import { auth, requiredScopes } from "express-oauth2-jwt-bearer";
 import dotenv from "dotenv";
-import { writeGenericDocument } from "./service/firestore.js";
+import { updateDocument, writeGenericDocument } from "./service/firestore.js";
 import { generateAuthParams } from "./service/photo.js";
 
 dotenv.config();
@@ -24,29 +24,31 @@ app.get('/', (req, res) => {
 app.post('/quote', checkJwt, (req,res) => {
     const reqData = req.body;
 
-    const userEmailOptions = {
-        to: "kyledkearney@gmail.com",
-        replyTo: reqData.email,
-        subject: `${reqData.product} quote from QualityLapelpins.com`,
-        text: `Name: ${reqData.name} \n Email: ${reqData.email} \n Product: ${reqData.product} \n Size: ${reqData.size} \n location: ${reqData.shippingLocation} \n, message: ${reqData.message}`,
-        attachments: [
-            {
-                filename: `lapel-pins-01.jpg`,
-                path: reqData.images[0]
-            },
-        ],
-    }
-
-    const requesterEmailOptions = {
-        to: reqData.email,
-        replyTo: "info@qualitylapelpins.com",
-        subject: `Your ${reqData.product} quote has been successfully submitted`,
-        text: "Thank you for submitting a quote with Quality Lapel Pins we will reach out as soon as possible",
-        html: "<b>Thank you for submitting a quote with Quality Lapel Pins we will reach out as soon as possible</b>"
-    }
 
     writeGenericDocument("quotes", reqData).then((docRef) => {
         if (req.body.submitted) {
+            const userEmailOptions = {
+                to: "kyledkearney@gmail.com",
+                replyTo: reqData.email,
+                subject: `${reqData.product} quote from QualityLapelpins.com`,
+                text: `Name: ${reqData.name} \n Email: ${reqData.email} \n Product: ${reqData.product} \n Size: ${reqData.size} \n location: ${reqData.shippingLocation} \n, message: ${reqData.message}`,
+                attachments: [
+                    {
+                        filename: `lapel-pins-01.jpg`,
+                        path: reqData.images[0]
+                    },
+                ],
+            }
+
+            const requesterEmailOptions = {
+                to: reqData.email,
+                replyTo: "info@qualitylapelpins.com",
+                subject: `Your ${reqData.product} quote has been successfully submitted`,
+                text: "Thank you for submitting a quote with Quality Lapel Pins we will reach out as soon as possible",
+                html: "<b>Thank you for submitting a quote with Quality Lapel Pins we will reach out as soon as possible</b>"
+            }
+
+
             mailSender(userEmailOptions).then(() => {
                 res.status(200).send("Your quote has been successfully sent!");
                 mailSender(requesterEmailOptions);
@@ -62,10 +64,6 @@ app.post('/quote', checkJwt, (req,res) => {
         //Admin notification
         res.status(500).send(JSON.stringify(error));
     })
-
-    // IF Submitted === TRUE
-    // send email to QLP
-    // send email to customer
     // ELSEIF submitted === false && OTHER CONDITION
     // send email to QLP
 });
@@ -86,7 +84,42 @@ app.get('/auth', checkJwt, (req,res) => {
 })
 
 app.put('/quote/:quoteId', (req, res) => {
-    // update quote
+    updateDocument("quotes", req.body.id, req.body).then(() => {
+        if (req.body.submitted) {
+            const userEmailOptions = {
+                to: "kyledkearney@gmail.com",
+                replyTo: reqData.email,
+                subject: `${reqData.product} quote from QualityLapelpins.com`,
+                text: `Name: ${reqData.name} \n Email: ${reqData.email} \n Product: ${reqData.product} \n Size: ${reqData.size} \n location: ${reqData.shippingLocation} \n, message: ${reqData.message}`,
+                attachments: [
+                    {
+                        filename: `lapel-pins-01.jpg`,
+                        path: reqData.images[0]
+                    },
+                ],
+            }
+
+            const requesterEmailOptions = {
+                to: reqData.email,
+                replyTo: "info@qualitylapelpins.com",
+                subject: `Your ${reqData.product} quote has been successfully submitted`,
+                text: "Thank you for submitting a quote with Quality Lapel Pins we will reach out as soon as possible",
+                html: "<b>Thank you for submitting a quote with Quality Lapel Pins we will reach out as soon as possible</b>"
+            }
+
+
+            mailSender(userEmailOptions).then(() => {
+                res.status(200).send("Your quote has been successfully sent!");
+                mailSender(requesterEmailOptions);
+            })
+                .catch(() => {
+                    console.error;
+                    res.status(500).send("Your message failed to send please contact Quality Lapel Pins")
+                }); 
+        } else {
+            res.status(500).send("Your message failed to send please contact Quality Lapel Pins")
+        }
+    })
 });
 
 app.listen(port, () => {
