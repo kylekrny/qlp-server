@@ -7,6 +7,6 @@ const imageKit = new ImageKit({
 });
 
 export const generateAuthParams = async () => {
-    return await imageKit.getAuthenticationParameters;
+    return await imageKit.getAuthenticationParameters();
 
 }

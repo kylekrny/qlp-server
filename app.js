@@ -40,7 +40,7 @@ app.post('/test', checkJwt, (req,res) => {
 app.get('/auth', checkJwt, (req,res) => {
     generateAuthParams().then((data) => {
         console.log(data);
-        res.sendStatus(200) 
+        res.sendStatus(200);
     })
 })
 
