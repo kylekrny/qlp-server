@@ -24,7 +24,7 @@ app.post('/quote', checkJwt, (req,res) => {
         res.status(200);
     })
         .catch(() => {
-            console.error
+            console.error;
         });
 });
 
