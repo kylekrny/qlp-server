@@ -25,31 +25,30 @@ app.post('/quote', checkJwt, (req,res) => {
 
     console.log(req.body);
     const reqData = req.body;
+    let docID;
 
-    const docRef = writeGenericDocument("quotes", reqData)
+    writeGenericDocument("quotes", reqData).then((docRef) => {
+        if (req.body.submitted) {
+            mailSender(reqData).then(() => {
+                res.status(200).send("Your quote has been successfully sent!");
+            })
+            .catch(() => {
+                console.error;
+                res.status(500).send("Your message failed to send please contact Quality Lapel Pins")
+            }); 
+        } else {
+            res.status(200).send(JSON.stringify({docID: docRef}))
+        }
+    }).catch((error) => {
+        //Admin notification
+        res.status(500).send(JSON.stringify(error));
+    })
 
-
-    console.log (docRef.id)
-
-    // send data to Firestore
-    // return quote id
     // IF Submitted === TRUE
     // send email to QLP
     // send email to customer
     // ELSEIF submitted === false && OTHER CONDITION
     // send email to QLP
-
-    if (req.body.submitted) {
-        mailSender(reqData).then(() => {
-            res.status(200).send("Your quote has been successfully sent!");
-        })
-            .catch(() => {
-                console.error;
-                res.status(500).send("Your message failed to send please contact Quality Lapel Pins")
-            });
-    } else {
-        res.status(200).send(JSON.stringify({docID: docRef.id}))
-    }
 });
 
 app.post('/test', checkJwt, (req,res) => {

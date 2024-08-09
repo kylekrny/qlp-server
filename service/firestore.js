@@ -18,7 +18,14 @@ const db = getFirestore(app);
 
 
 export const writeGenericDocument = async (collectionID, body) => {
-    await addDoc(collection(db, collectionID), body);
+    const docRef = await addDoc(collection(db, collectionID), body);
+
+    if (docRef.id) {
+        return docRef.id
+    } else {
+        throw new Error("Document was not able to be created");
+        
+    }
 };
 
 export const updateDocument = async (collectionID, documentID, body) => {
