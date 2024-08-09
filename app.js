@@ -22,10 +22,7 @@ app.get('/', (req, res) => {
 });
 
 app.post('/quote', checkJwt, (req,res) => {
-
-    console.log(req.body);
     const reqData = req.body;
-    let docID;
 
     writeGenericDocument("quotes", reqData).then((docRef) => {
         if (req.body.submitted) {
