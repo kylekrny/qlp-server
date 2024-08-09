@@ -117,8 +117,10 @@ app.put('/quote/:quoteId', (req, res) => {
                     res.status(500).send("Your message failed to send please contact Quality Lapel Pins")
                 }); 
         } else {
-            res.status(500).send("Your message failed to send please contact Quality Lapel Pins")
+            res.sendStatus(200);
         }
+    }).catch(() => {
+        res.status(500).send("Your message failed to send please contact Quality Lapel Pins")
     })
 });
 
