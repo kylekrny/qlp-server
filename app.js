@@ -2,7 +2,7 @@ import express from "express";
 import { mailSender } from "./service/mail.js";
 import { auth, requiredScopes } from "express-oauth2-jwt-bearer";
 import dotenv from "dotenv";
-import { testFirebase } from "./service/firestore.js";
+import { writeGenericDocument } from "./service/firestore.js";
 import { generateAuthParams } from "./service/photo.js";
 
 dotenv.config();
@@ -20,12 +20,25 @@ app.get('/', (req, res) => {
 });
 
 app.post('/quote', checkJwt, (req,res) => {
-    mailSender().then(() => {
-        res.status(200);
-    })
-        .catch(() => {
-            console.error;
-        });
+    const reqData = JSON.parse(req);
+
+    writeGenericDocument
+    // send data to Firestore
+    // return quote id
+    // IF Submitted === TRUE
+    // send email to QLP
+    // send email to customer
+    // ELSEIF submitted === false && OTHER CONDITION
+    // send email to QLP
+
+    if (req.body.isSubmitted) {
+        mailSender().then(() => {
+            res.status(200);
+        })
+            .catch(() => {
+                console.error;
+            });
+    };
 });
 
 app.post('/test', checkJwt, (req,res) => {
@@ -34,8 +47,8 @@ app.post('/test', checkJwt, (req,res) => {
     }).catch((e) => {
         res.sendStatus(500);
         console.log(e);
-    })
-})
+    });
+});
 
 app.get('/auth', checkJwt, (req,res) => {
     generateAuthParams().then((data) => {
@@ -44,9 +57,23 @@ app.get('/auth', checkJwt, (req,res) => {
 })
 
 app.put('/quote/:quoteId', (req, res) => {
-    mailSender()
+    // update quote
 });
 
 app.listen(port, () => {
     console.log(`Example app listening on port ${port}`);
 });
+
+
+const reqBody = {
+    name: "string",
+    email: "string",
+    product: "string",
+    size: "string",
+    quantity: "string",
+    shippingLocation: "string",
+    Message: "string",
+    image1: "string",
+    image2: "string",
+    submitted: false,
+}
