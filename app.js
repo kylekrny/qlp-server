@@ -27,12 +27,12 @@ app.post('/quote', checkJwt, (req,res) => {
     const userEmailOptions = {
         to: "kyledkearney@gmail.com",
         replyTo: reqData.email,
-        subject: `${redData.product} quote from QualityLapelpins.com`,
-        text: `Name: ${reqData} \n Email: ${reqData.email} \n Product: ${reqData.product} \n Size: ${reqData.size} \n location: ${reqData.shippingLocation} \n, message: ${reqData.message}`,
+        subject: `${reqData.product} quote from QualityLapelpins.com`,
+        text: `Name: ${reqData.name} \n Email: ${reqData.email} \n Product: ${reqData.product} \n Size: ${reqData.size} \n location: ${reqData.shippingLocation} \n, message: ${reqData.message}`,
         attachments: [
             {
-                filename: `${reqData.product}-01`,
-                content: reqData.Images[0]
+                filename: `lapel-pins-01.jpg`,
+                path: reqData.images[0]
             },
         ],
     }
