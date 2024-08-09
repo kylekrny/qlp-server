@@ -18,12 +18,12 @@ export const mailSender = async (options, body, formattedBody) => {
     const info = await transporter.sendMail({
         // From format: '"No Reply @ Quality Lapel Pins" <noreply@qualitylapelpins.com>'
         from: '"No Reply @ Quality Lapel Pins" <noreply@qualitylapelpins.com>',
-        replyTo: options.replyTo
+        replyTo: options.replyTo,
         to: options.to,
         subject: options.subject,
-        text: body,
-        html: formattedBody,
-        attachments
+        text: options.text,
+        html: options.html,
+        attachments: options.attachments,
     });
 
     console.log(info.messageId)

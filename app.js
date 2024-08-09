@@ -47,8 +47,9 @@ app.post('/quote', checkJwt, (req,res) => {
 
     writeGenericDocument("quotes", reqData).then((docRef) => {
         if (req.body.submitted) {
-            mailSender(reqData).then(() => {
+            mailSender(userEmailOptions).then(() => {
                 res.status(200).send("Your quote has been successfully sent!");
+                mailSender(requesterEmailOptions);
             })
             .catch(() => {
                 console.error;
