@@ -7,6 +7,8 @@ import { generateAuthParams } from "./service/photo.js";
 
 dotenv.config();
 const app = express();
+
+app.use(express.json())
 const port = process.env.PORT;
 
 const checkJwt = auth({
@@ -20,7 +22,9 @@ app.get('/', (req, res) => {
 });
 
 app.post('/quote', checkJwt, (req,res) => {
-    const reqData = JSON.parse(req.body);
+
+    console.log(req.body);
+    const reqData = req.body;
 
     const docRef = writeGenericDocument("quotes", reqData)
 
@@ -35,7 +39,7 @@ app.post('/quote', checkJwt, (req,res) => {
     // ELSEIF submitted === false && OTHER CONDITION
     // send email to QLP
 
-    if (req.body.isSubmitted) {
+    if (req.body.submitted) {
         mailSender(reqData).then(() => {
             res.status(200).send("Your quote has been successfully sent!");
         })
@@ -80,7 +84,6 @@ const reqBody = {
     quantity: "string",
     shippingLocation: "string",
     Message: "string",
-    image1: "string",
-    image2: "string",
+    images: ["string", "string"],
     submitted: false,
 }
