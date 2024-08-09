@@ -24,6 +24,27 @@ app.get('/', (req, res) => {
 app.post('/quote', checkJwt, (req,res) => {
     const reqData = req.body;
 
+    const userEmailOptions = {
+        to: "kyledkearney@gmail.com",
+        replyTo: reqData.email,
+        subject: `${redData.product} quote from QualityLapelpins.com`,
+        text: `Name: ${reqData} \n Email: ${reqData.email} \n Product: ${reqData.product} \n Size: ${reqData.size} \n location: ${reqData.shippingLocation} \n, message: ${reqData.message}`,
+        attachments: [
+            {
+                filename: `${reqData.product}-01`,
+                content: reqData.Images[0]
+            },
+        ],
+    }
+
+    const requesterEmailOptions = {
+        to: reqData.email,
+        replyTo: "info@qualitylapelpins.com",
+        subject: `Your ${reqData.product} quote has been successfully submitted`,
+        text: "Thank you for submitting a quote with Quality Lapel Pins we will reach out as soon as possible",
+        html: "<b>Thank you for submitting a quote with Quality Lapel Pins we will reach out as soon as possible</b>"
+    }
+
     writeGenericDocument("quotes", reqData).then((docRef) => {
         if (req.body.submitted) {
             mailSender(reqData).then(() => {
@@ -79,7 +100,7 @@ const reqBody = {
     size: "string",
     quantity: "string",
     shippingLocation: "string",
-    Message: "string",
+    message: "string",
     images: ["string", "string"],
     submitted: false,
 }
