@@ -2,7 +2,7 @@ import express from "express";
 import { mailSender } from "./service/mail.js";
 import { auth, requiredScopes } from "express-oauth2-jwt-bearer";
 import dotenv from "dotenv";
-import { updateDocument, writeGenericDocument } from "./service/firestore.js";
+import { readDocument, updateDocument, writeGenericDocument } from "./service/firestore.js";
 import { generateAuthParams } from "./service/photo.js";
 
 dotenv.config();
@@ -17,8 +17,28 @@ const checkJwt = auth({
     tokenSigningAlg: "RS256",
 })
 
-const TimeOut = () => {
-    setTimeout(() => console.log("Time out for one minute"), 1800000)
+const abandonedEmailOptions = {
+    to: "kyledkearney@gmail.com",
+    replyTo: reqData.email,
+    subject: `Abandoned quote from QualityLapelpins.com`,
+    text: `Name: ${reqData.name || "n/a"} \n Email: ${reqData.email || "n/a"} \n Product: ${reqData.product || "n/a"} \n Size: ${reqData.size || "n/a"} \n location: ${reqData.shippingLocation || "n/a"} \n, message: ${reqData.message || "n/a"}`,
+    attachments: [
+        {
+            filename: `lapel-pins-01.jpg`,
+            path: reqData.images[0]
+        },
+    ],
+}
+
+const abandonedTimeOut = (id) => {
+
+    setTimeout(() => {
+        mailSender(abandonedEmailOptions).then(() => {
+            updateDocument("quotes", id, {abandoned: true, notificationSent: Date.now()})
+        }).catch(() => {
+            console.error
+        })
+    }, 1800000)
 }
 
 app.get('/', (req, res) => {
@@ -87,8 +107,8 @@ app.get('/auth', checkJwt, (req,res) => {
     })
 })
 
-app.put('/quote/:quoteId', (req, res) => {
-    updateDocument("quotes", req.body.id, req.body).then(() => {
+app.put('/quote/:id', (req, res) => {
+    updateDocument("quotes", req.params.id, req.body).then(() => {
         if (req.body.submitted) {
             const userEmailOptions = {
                 to: "kyledkearney@gmail.com",
@@ -132,9 +152,15 @@ app.put('/quote/:quoteId', (req, res) => {
     })
 });
 
-app.get('/exit', checkJwt, (req, res) => {
+app.get('/exit/:id', checkJwt, (req, res) => {
+    readDocument(req.params.id).then((data) => {
+        if (data.email && !data.submitted) {
+            abandonedTimeOut(req.params.id);
+        }
+    }).catch((err) => {
+
+    })
     res.sendStatus(200)
-    testTimeOut();
 })
 
 app.listen(port, () => {
@@ -164,7 +190,8 @@ const fireStoreBody = {
     message: "string",
     images: ["string", "string"],
     submitted: false,
-    notificationSent: "",
+    abandoned: true,
+    sent: "date",
     created: "date",
     lastUpdated: "date",
 }
