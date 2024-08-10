@@ -17,6 +17,10 @@ const checkJwt = auth({
     tokenSigningAlg: "RS256",
 })
 
+const TimeOut = () => {
+    setTimeout(() => console.log("Time out for one minute"), 1800000)
+}
+
 app.get('/', (req, res) => {
     res.send('The app is running...');
 });
@@ -118,11 +122,20 @@ app.put('/quote/:quoteId', (req, res) => {
                 }); 
         } else {
             res.sendStatus(200);
+
+            if (req.body.email) {
+                // if email, but abandoned send email form.
+            }
         }
     }).catch(() => {
         res.status(500).send("Your message failed to send please contact Quality Lapel Pins")
     })
 });
+
+app.get('/exit', checkJwt, (req, res) => {
+    res.sendStatus(200)
+    testTimeOut();
+})
 
 app.listen(port, () => {
     console.log(`Example app listening on port ${port}`);
@@ -139,4 +152,19 @@ const reqBody = {
     message: "string",
     images: ["string", "string"],
     submitted: false,
+}
+
+const fireStoreBody = {
+    name: "string",
+    email: "string",
+    product: "string",
+    size: "string",
+    quantity: "string",
+    shippingLocation: "string",
+    message: "string",
+    images: ["string", "string"],
+    submitted: false,
+    notificationSent: "",
+    created: "date",
+    lastUpdated: "date",
 }
