@@ -8,6 +8,12 @@ import { generateAuthParams } from "./service/photo.js";
 dotenv.config();
 const app = express();
 
+app.use((req, res, next) => {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
+    res.header("Access-Control-Allow-Methods", "*")
+    next();
+});
 app.use(express.json())
 const port = process.env.PORT;
 
@@ -17,23 +23,23 @@ const checkJwt = auth({
     tokenSigningAlg: "RS256",
 })
 
-const abandonedEmailOptions = {
+const abandonedEmailOptions = (reqData) => { return {
     to: "kyledkearney@gmail.com",
     replyTo: reqData.email,
     subject: `Abandoned quote from QualityLapelpins.com`,
-    text: `Name: ${reqData.name || "n/a"} \n Email: ${reqData.email || "n/a"} \n Product: ${reqData.product || "n/a"} \n Size: ${reqData.size || "n/a"} \n location: ${reqData.shippingLocation || "n/a"} \n, message: ${reqData.message || "n/a"}`,
+    text: `Name: ${reqData.name || "n/a"} \n Email: ${reqData.email} \n Product: ${reqData.product || "n/a"} \n Size: ${reqData.size || "n/a"} \n location: ${reqData.shippingLocation || "n/a"} \n, message: ${reqData.message || "n/a"}`,
     attachments: [
         {
             filename: `lapel-pins-01.jpg`,
             path: reqData.images[0]
         },
     ],
-}
+}}
 
-const abandonedTimeOut = (id) => {
+const abandonedTimeOut = (data, id) => {
 
     setTimeout(() => {
-        mailSender(abandonedEmailOptions).then(() => {
+        mailSender(abandonedEmailOptions(data)).then(() => {
             updateDocument("quotes", id, {abandoned: true, notificationSent: Date.now()})
         }).catch(() => {
             console.error
@@ -47,7 +53,6 @@ app.get('/', (req, res) => {
 
 app.post('/quote', checkJwt, (req,res) => {
     const reqData = req.body;
-
 
     writeGenericDocument("quotes", reqData).then((docRef) => {
         if (req.body.submitted) {
@@ -82,7 +87,7 @@ app.post('/quote', checkJwt, (req,res) => {
                 res.status(500).send("Your message failed to send please contact Quality Lapel Pins")
             }); 
         } else {
-            res.status(200).send(JSON.stringify({docID: docRef}))
+            res.status(200).send(JSON.stringify({docId: docRef}))
         }
     }).catch((error) => {
         //Admin notification
@@ -108,6 +113,7 @@ app.get('/auth', checkJwt, (req,res) => {
 })
 
 app.put('/quote/:id', (req, res) => {
+    console.log(req.params.id, req.body)
     updateDocument("quotes", req.params.id, req.body).then(() => {
         if (req.body.submitted) {
             const userEmailOptions = {
@@ -142,20 +148,17 @@ app.put('/quote/:id', (req, res) => {
                 }); 
         } else {
             res.sendStatus(200);
-
-            if (req.body.email) {
-                // if email, but abandoned send email form.
-            }
         }
-    }).catch(() => {
-        res.status(500).send("Your message failed to send please contact Quality Lapel Pins")
+    }).catch((error) => {
+        console.error(error)
+        res.status(500).send(error)
     })
 });
 
 app.get('/exit/:id', checkJwt, (req, res) => {
     readDocument(req.params.id).then((data) => {
         if (data.email && !data.submitted) {
-            abandonedTimeOut(req.params.id);
+            abandonedTimeOut(data, id);
         }
     }).catch((err) => {
 

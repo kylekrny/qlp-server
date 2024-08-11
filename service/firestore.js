@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import { getFirestore, collection, addDoc, updateDoc, getDoc } from "firebase/firestore";
+import { getFirestore, collection, addDoc, updateDoc, getDoc, doc } from "firebase/firestore";
 
 const firebaseConfig = {
     apiKey: process.env.FIREBASE_API_KEY,
@@ -29,7 +29,7 @@ export const writeGenericDocument = async (collectionID, body) => {
 };
 
 export const updateDocument = async (collectionID, documentID, body) => {
-    await updateDoc((db, collectionID, documentID), body);
+    await updateDoc(doc(db, collectionID, documentID), body);
 };
 
 export const readDocument = async (collectionID, documentID) => {
