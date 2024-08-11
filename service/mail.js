@@ -13,14 +13,17 @@ const transporter = nodemailer.createTransport({
     },
 });
 
-export const mailSender = async () => {
+export const mailSender = async (options, body, formattedBody) => {
 
     const info = await transporter.sendMail({
-        from: '"No Reply" <noreply@qualitylapelpins.com>',
-        to: "kyledkearney@gmail.com",
-        subject: "Test",
-        text: "Hello Javascript Email!",
-        html: "<b>Hello Javascript Email</b>",
+        // From format: '"No Reply @ Quality Lapel Pins" <noreply@qualitylapelpins.com>'
+        from: '"No Reply @ Quality Lapel Pins" <noreply@qualitylapelpins.com>',
+        replyTo: options.replyTo,
+        to: options.to,
+        subject: options.subject,
+        text: options.text,
+        html: options.html,
+        attachments: options.attachments,
     });
 
     console.log(info.messageId)

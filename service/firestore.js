@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import { getFirestore, collection, addDoc } from "firebase/firestore";
+import { getFirestore, collection, addDoc, updateDoc, getDoc, doc } from "firebase/firestore";
 
 const firebaseConfig = {
     apiKey: process.env.FIREBASE_API_KEY,
@@ -17,16 +17,27 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
 
-export const testFirebase = async () => {
+export const writeGenericDocument = async (collectionID, body) => {
+    const docRef = await addDoc(collection(db, collectionID), body);
 
-    
-    const docRef = await addDoc(collection(db, "users"), {
-        first: "Ada",
-        last: "Lovelace",
-        born: 1815
-    });
+    if (docRef.id) {
+        return docRef.id
+    } else {
+        throw new Error("Document was not able to be created");
+        
+    }
+};
 
-    console.log("Document written with ID: ", docRef.id);
+export const updateDocument = async (collectionID, documentID, body) => {
+    await updateDoc(doc(db, collectionID, documentID), body);
+};
 
-    return docRef;
+export const readDocument = async (collectionID, documentID) => {
+    const document = await getDoc(doc(db, collectionID, documentID));
+
+    if (document.exists()) {
+        return document.data();
+    } else {
+        throw new Error("ERROR: Document doesn't exist");
+    }
 }
