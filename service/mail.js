@@ -30,3 +30,28 @@ export const mailSender = async (options, body, formattedBody) => {
 }
 
 
+
+export const attachmentLogic = (img1, img2) => {
+    const image1 = {
+        filename: img1?.name,
+        path: img1?.url,
+    };
+
+    const image2 = {
+        filename: img2?.name,
+        path: img2?.url, 
+    }
+
+    if (img1 && !img2) {
+        return {attachments: [image1]}
+    } else if (img2 && !img1) {
+        return { attachments: [image2] }
+    } else if (!img1 && !img2) {
+        return { attachments: [] }
+    } else if (img1 && img2) {
+        return { attachments: [image1, image2] }
+    }
+
+    
+
+}
