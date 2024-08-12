@@ -49,15 +49,6 @@ app.post('/quote', (req,res) => {
     })
 });
 
-app.post('/test', (req,res) => {
-    testFirebase().then(() => {
-        res.sendStatus(200);
-    }).catch((e) => {
-        res.sendStatus(500);
-        console.log(e);
-    });
-});
-
 app.get('/upload', (req,res) => {
     generateAuthParams().then((data) => {
         res.status(200).send(JSON.stringify(data));
@@ -73,7 +64,7 @@ app.put('/quote/:id', (req, res) => {
                     to: process.env.NOTIFICATION_EMAIL,
                     replyTo: data.email,
                     subject: `${data.product} quote from Qualitylapelpins.com`,
-                    text: `Name: ${data.name || "n/a"} \n Email: ${data.email || "n/a"} \n Product: ${data.product || "n/a"} \n Size: ${data.size || "n/a"} \n location: ${data.shippingLocation || "n/a"} \n, message: ${data.message || "n/a"}`,
+                    text: `Name: ${data.name || "n/a"} \n Email: ${data.email || "n/a"} \n Product: ${data.product || "n/a"} \n Size: ${data.size || "n/a"} \n location: ${data.shippingLocation || "n/a"} \n message: ${data.message || "n/a"}`,
                     ...attachmentLogic(data.image1, data.image2),    
                 }
                 
