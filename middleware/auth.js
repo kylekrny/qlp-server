@@ -1,4 +1,4 @@
-export verifyAuth = (req, res, next) =>{
+export const verifyAuth = (req, res, next) =>{
     const token = process.env.TOKEN;
 
     if (req.query.apiToken !== token) {
