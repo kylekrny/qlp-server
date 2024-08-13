@@ -35,7 +35,7 @@ const abandonedEmail = (data, id) => {
 }
 
 app.get('/', (req, res) => {
-    res.send('The app is running...');
+    res.send({message: 'The app is running...'});
 });
 
 app.post('/quote', (req,res) => {
@@ -47,17 +47,6 @@ app.post('/quote', (req,res) => {
         //Admin notification
         res.status(500).send(JSON.stringify(error));
     })
-    // ELSEIF submitted === false && OTHER CONDITION
-    // send email to QLP
-});
-
-app.post('/test', (req,res) => {
-    testFirebase().then(() => {
-        res.sendStatus(200);
-    }).catch((e) => {
-        res.sendStatus(500);
-        console.log(e);
-    });
 });
 
 app.get('/upload', (req,res) => {
@@ -75,11 +64,9 @@ app.put('/quote/:id', (req, res) => {
                     to: process.env.NOTIFICATION_EMAIL,
                     replyTo: data.email,
                     subject: `${data.product} quote from Qualitylapelpins.com`,
-                    text: `Name: ${data.name || "n/a"} \n Email: ${data.email || "n/a"} \n Product: ${data.product || "n/a"} \n Size: ${data.size || "n/a"} \n location: ${data.shippingLocation || "n/a"} \n, message: ${data.message || "n/a"}`,
+                    text: `Name: ${data.name || "n/a"} \n Email: ${data.email || "n/a"} \n Product: ${data.product || "n/a"} \n Size: ${data.size || "n/a"} \n location: ${data.shippingLocation || "n/a"} \n message: ${data.message || "n/a"}`,
                     ...attachmentLogic(data.image1, data.image2),    
                 }
-
-                console.log(userEmailOptions)
                 
                 const requesterEmailOptions = {
                     to: data.email,
@@ -91,16 +78,16 @@ app.put('/quote/:id', (req, res) => {
                 
                 
                 mailSender(userEmailOptions).then(() => {
-                    res.status(200).send("Your quote has been successfully sent!");
+                    res.status(200).send({message: "Your quote has been successfully sent!"});
                     // mailSender(requesterEmailOptions);
                 })
                 .catch(() => {
                     console.error;
-                    res.status(500).send("Your message failed to send please contact Quality Lapel Pins")
+                    res.status(500).send({message: "Your message failed to send please contact Quality Lapel Pins"});
                 }); 
         })
         } else {
-            res.sendStatus(200);
+            res.status(200).send({message: "Record successfully updated."});
         }
     }).catch((error) => {
         console.error(error)
