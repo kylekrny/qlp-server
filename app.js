@@ -1,10 +1,8 @@
 import express from "express";
 import { attachmentLogic, mailSender } from "./service/mail.js";
-import { auth, requiredScopes } from "express-oauth2-jwt-bearer";
 import dotenv from "dotenv";
 import { readDocument, updateDocument, writeGenericDocument } from "./service/firestore.js";
 import { generateAuthParams } from "./service/photo.js";
-import { verifyAuth } from "./middleware/auth.js";
 
 dotenv.config();
 const app = express();
