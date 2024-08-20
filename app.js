@@ -102,32 +102,3 @@ app.get('/exit/:id', (req, res) => {
 app.listen(port, () => {
     console.log(`App listening on port 3000`);
 });
-
-
-const reqBody = {
-    name: "string",
-    email: "string",
-    product: "string",
-    size: "string",
-    quantity: "string",
-    shippingLocation: "string",
-    message: "string",
-    images: ["string", "string"],
-    submitted: false,
-}
-
-const fireStoreBody = {
-    name: "string",
-    email: "string",
-    product: "string",
-    size: "string",
-    quantity: "string",
-    shippingLocation: "string",
-    message: "string",
-    images: ["string", "string"],
-    submitted: false,
-    abandoned: true,
-    sent: "date",
-    created: "date",
-    lastUpdated: "date",
-}
