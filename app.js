@@ -29,7 +29,7 @@ const abandonedEmailOptions = (reqData) => {
 
 const abandonedEmail = (data, id) => {
     mailSender(abandonedEmailOptions(data)).then(() => {
-        updateDocument("quotes", id, { abandoned: true, notificationSent: Date.now() })
+        updateDocument("quotes", id, { abandoned: true, notificationSent: Date.now() });
     }).catch((err) => {
         console.error(err)
     })
@@ -65,8 +65,8 @@ app.put('/quote/:id', (req, res) => {
                     to: process.env.NOTIFICATION_EMAIL,
                     replyTo: data.email,
                     subject: `${data.product} Quote from Qualitylapelpins.com`,
-                    text: `Name: ${data.name || "n/a"} \n Email: ${data.email || "n/a"} \n Product: ${data.product || "n/a"} \n Size: ${data.size || "n/a"} \n location: ${data.shippingLocation || "n/a"} \n message: ${data.message || "n/a"}`,
-                    html: `<p>Name: ${data.name || "n/a"}</p><p>Email: ${data.email || "n/a"}</p><p>Product: ${data.product || "n/a"}</p><p>Size: ${data.size || "n/a"}</p><p>Location: ${data.shippingLocation || "n/a"}</p><p>Message: ${data.message || "n/a"}</p>`,
+                    text: `Name: ${data.name || "n/a"} \n Email: ${data.email || "n/a"} \n Product: ${data.product || "n/a"} \n Size: ${data.size || "n/a"} \n Quantity: ${data.quantity || "n/a"} \n Location: ${data.shippingLocation || "n/a"} \n message: ${data.message || "n/a"}`,
+                    html: `<p>Name: ${data.name || "n/a"}</p><p>Email: ${data.email || "n/a"}</p><p>Product: ${data.product || "n/a"}</p><p>Size: ${data.size || "n/a"}</p><p>Quantity: ${data.quantity || "n/a"}</p><p>Location: ${data.shippingLocation || "n/a"}</p><p>Message: ${data.message || "n/a"}</p>`,
                     ...attachmentLogic(data.image1, data.image2),
                 }
 
