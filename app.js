@@ -23,7 +23,7 @@ const abandonedEmailOptions = (reqData) => {
         replyTo: reqData.email,
         subject: `Abandoned Quote from QualityLapelpins.com`,
         text: `Name: ${reqData.name || "n/a"} \n Email: ${reqData.email} \n Product: ${reqData.product || "n/a"} \n Size: ${reqData.size || "n/a"} \n location: ${reqData.shippingLocation || "n/a"} \n, message: ${reqData.message || "n/a"}`,
-        html: `<p>Name: ${reqData.name || "n/a"}</p><p>Email: ${reqData.email || "n/a"}</p><p>Product: ${reqData.product || "n/a"}</p><p>Size: ${reqData.size || "n/a"}</p><p>Location: </p><p>Message: ${reqData.message || "n/a"}</p>`
+        html: `<p>Name: ${reqData.name || "n/a"}</p><p>Email: ${reqData.email || "n/a"}</p><p>Product: ${reqData.product || "n/a"}</p><p>Size: ${reqData.size || "n/a"}</p><p>Location: ${reqData.shippingLocation || "n/a"}</p><p>Message: ${reqData.message || "n/a"}</p>`
     }
 }
 
@@ -66,22 +66,13 @@ app.put('/quote/:id', (req, res) => {
                     replyTo: data.email,
                     subject: `${data.product} Quote from Qualitylapelpins.com`,
                     text: `Name: ${data.name || "n/a"} \n Email: ${data.email || "n/a"} \n Product: ${data.product || "n/a"} \n Size: ${data.size || "n/a"} \n location: ${data.shippingLocation || "n/a"} \n message: ${data.message || "n/a"}`,
-                    html: `<p>Name: ${data.name || "n/a"}</p><p>Email: ${data.email || "n/a"}</p><p>Product: ${data.product || "n/a"}</p><p>Size: ${data.size || "n/a"}</p><p>Location: </p><p>Message: ${data.message || "n/a"}</p>`,
+                    html: `<p>Name: ${data.name || "n/a"}</p><p>Email: ${data.email || "n/a"}</p><p>Product: ${data.product || "n/a"}</p><p>Size: ${data.size || "n/a"}</p><p>Location: ${data.shippingLocation || "n/a"}</p><p>Message: ${data.message || "n/a"}</p>`,
                     ...attachmentLogic(data.image1, data.image2),
-                }
-
-                const requesterEmailOptions = {
-                    to: data.email,
-                    replyTo: "info@qualitylapelpins.com",
-                    subject: `Your ${data.product} quote has been successfully submitted`,
-                    text: "Thank you for submitting a quote with Quality Lapel Pins we will reach out as soon as possible",
-                    html: "<b>Thank you for submitting a quote with Quality Lapel Pins we will reach out as soon as possible</b>"
                 }
 
 
                 mailSender(userEmailOptions).then(() => {
                     res.status(200).send({ message: "Your quote has been successfully sent!" });
-                    // mailSender(requesterEmailOptions);
                 })
                     .catch(() => {
                         console.error(error);
